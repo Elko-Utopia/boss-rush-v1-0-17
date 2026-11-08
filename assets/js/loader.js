@@ -12,12 +12,6 @@ function makeCodeRun(options) {
     var started = false;
     var meta = undefined;
 
-    // The portfolio uses ?embed=1&nofooter=1. Only that combination
-    // displays the bare game screen; the standalone page keeps its controls.
-    var pageParams = new URLSearchParams(window.location.search);
-    var screenOnlyEmbed = pageParams.get("embed") === "1" &&
-        pageParams.get("nofooter") === "1";
-
     // hide scrollbar
     window.scrollTo(0, 1);
     // init runtime
@@ -42,17 +36,12 @@ function makeCodeRun(options) {
                 ap.innerText = "v" + meta.version;
                 vel.appendChild(ap);
             }
-            // Keep the simulator version from the compiled game metadata.
-            // Hide the virtual console ONLY for the portfolio embed.
-            var simulatorUrl = meta.simUrl;
-            if (screenOnlyEmbed) {
-                var simulatorAddress = new URL(meta.simUrl);
-                simulatorAddress.searchParams.set("hideSimButtons", "1");
-                simulatorAddress.searchParams.set("fullscreen", "1");
-                simulatorUrl = simulatorAddress.toString();
-            }
+            // Both standalone and embedded views always show only the game screen.
+            var simulatorAddress = new URL(meta.simUrl);
+            simulatorAddress.searchParams.set("hideSimButtons", "1");
+            simulatorAddress.searchParams.set("fullscreen", "1");
             document.getElementById("simframe")
-                .setAttribute("src", simulatorUrl);
+                .setAttribute("src", simulatorAddress.toString());
             initFullScreen();
         })
     }
