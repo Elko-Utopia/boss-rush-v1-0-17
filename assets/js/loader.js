@@ -12,6 +12,12 @@ function makeCodeRun(options) {
     var started = false;
     var meta = undefined;
 
+    // The portfolio uses ?embed=1&nofooter=1. Only that combination
+    // displays the bare game screen; the standalone page keeps its controls.
+    var pageParams = new URLSearchParams(window.location.search);
+    var screenOnlyEmbed = pageParams.get("embed") === "1" &&
+        pageParams.get("nofooter") === "1";
+
     // hide scrollbar
     window.scrollTo(0, 1);
     // init runtime
@@ -36,9 +42,17 @@ function makeCodeRun(options) {
                 ap.innerText = "v" + meta.version;
                 vel.appendChild(ap);
             }
-            // load simulator with correct version
+            // Keep the simulator version from the compiled game metadata.
+            // Hide the virtual console ONLY for the portfolio embed.
+            var simulatorUrl = meta.simUrl;
+            if (screenOnlyEmbed) {
+                var simulatorAddress = new URL(meta.simUrl);
+                simulatorAddress.searchParams.set("hideSimButtons", "1");
+                simulatorAddress.searchParams.set("fullscreen", "1");
+                simulatorUrl = simulatorAddress.toString();
+            }
             document.getElementById("simframe")
-                .setAttribute("src", meta.simUrl);
+                .setAttribute("src", simulatorUrl);
             initFullScreen();
         })
     }
@@ -130,7 +144,7 @@ function makeCodeRun(options) {
     function postMessage(msg) {
         const frame = document.getElementById("simframe");
         if (frame)
-            frame.contentWindow.postMessage(msg, meta.simUrl);
+            frame.contentWindow.postMessage(msg, new URL(meta.simUrl).origin);
     }
 
     function sendReq(url, cb) {
