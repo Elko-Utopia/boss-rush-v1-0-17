@@ -2,31 +2,41 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript" src="./js/loader.js"></script>
     <script type="text/javascript" src="./js/custom.js"></script>
     <style>
-        body {
-            background: black;
-            color: white;
-            font-family: monospace;
-            overflow: hidden;
-            font-size: 14pt;
-        }
+html, body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
 
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        #fullscreen {
-            position: absolute;
-            right: 0.25rem;
-            bottom: 0;
-            cursor: pointer;
-        }
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: black;
+    color: white;
+    font-family: monospace;
+    overflow-x: hidden;
+    font-size: 14pt;
+}
+
+#simframe {
+    position: relative;
+    display: block;
+    flex: none;
+    width: min(100vw, calc(100vh * 4 / 3));
+    width: min(100vw, calc(100dvh * 4 / 3));
+    height: auto;
+    aspect-ratio: 4 / 3;
+    border: none;
+}
+
+#fullscreen { display: none; }
+
         .lds-ripple {
             width: 80px;
             height: 80px;

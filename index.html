@@ -6,6 +6,7 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ site.github.project_title }}</title>
     <meta name="description" content="{{ site.github.project_tagline }}" />
     <meta name="author" content="{{ site.github.owner_name }}">
@@ -31,30 +32,42 @@
     <script type="text/javascript" src="./assets/js/loader.js?v={{ site.github.build_revision }}"></script>
     <script type="text/javascript" src="./assets/js/custom.js?v={{ site.github.build_revision }}"></script>
     <style>
-        body {
-            background: black;
-            color: white;
-            font-family: monospace;
-            overflow: hidden;
-            font-size: 14pt;
-        }
+html, body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
 
-        .embed {
-            background: transparent;
-        }
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: black;
+    color: white;
+    font-family: monospace;
+    overflow-x: hidden;
+    font-size: 14pt;
+}
 
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: calc(100% - 1.5em);
-            border: none;
-        }
+.embed { background: transparent; }
 
-        .nofooter iframe {
-            height: 100%;
-        }
+/* Arcade's actual screen is 160 × 120 (4:3), not the old console shell.
+   Restrict BOTH dimensions; a 100%-height iframe leaves the old shell's
+   blank area behind even after hideSimButtons is enabled. */
+#simframe {
+    position: relative;
+    display: block;
+    flex: none;
+    width: min(100vw, calc(100vh * 4 / 3));
+    width: min(100vw, calc(100dvh * 4 / 3));
+    height: auto;
+    aspect-ratio: 4 / 3;
+    border: none;
+}
+
+/* In every mode the game page displays the game screen only. */
+#footer, #fullscreen { display: none; }
 
         footer {
             color: grey;
